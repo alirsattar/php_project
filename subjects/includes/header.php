@@ -63,8 +63,13 @@ $v2styles = TRUE;
                 <a href="<?php print $PublicPath; ?>"><img class="main_logo" src="<?php print $AssetPath; ?>images/public/logo.png" alt="Home Page" /></a>
                 
             </div>
-            <div class="pure-u-1 pure-u-md-4-5">
+            <div class="pure-u-1 pure-u-md-3-5">
                 <?php if (isset($v2styles)) { print "<h1>$page_title</h1>"; } ?>
+            </div>
+            <div class="pure-u-1 pure-u-md-1-5">
+                <a href="http://localhost:3000/control/login">
+                    <h1>LOGIN</h1>
+                </a>
             </div>
         </div>
     </div>

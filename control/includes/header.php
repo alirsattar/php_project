@@ -110,10 +110,12 @@ if( !isset( $updateCheck ) || $updateCheck != 'no' )
 //added in order to redirect to proper page if user has not logged in. Only check if $sessionCheck variable doesn't exists and says no
 if( !isset($sessionCheck) || $sessionCheck != 'no' )
 {
+	
 	$sessionCheck = checkSession();
-
+	
 	if ($sessionCheck == "failure" ) {
-
+		
+		error_log(print_r('NOT LOGGED IN', TRUE));
 		// set a cookie for the page they wanted to visit
 		session_regenerate_id();
         if(!isset($_SESSION))
