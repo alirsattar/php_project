@@ -23,6 +23,8 @@ class Pluslet_OrgChart extends Pluslet {
         // What kind of hierarchy should be used
         global $default_orgChartByHierarchy;
 
+        $this->jsonObj = (object)[];
+
         if( (isset($this->_orgChartByHierarchy)) && (!empty($this->_orgChartByHierarchy)) ) {
             $title = $this->_orgChartByHierarchy;
         } else {
@@ -61,20 +63,11 @@ class Pluslet_OrgChart extends Pluslet {
         $this->title         = $settings['title'];
         $this->email         = $settings['email'];
         $this->tel           = $settings['tel'];
-        $this->img_url       = $settings['img_url'];
-        $this->facebook      = $settings['facebook'];
-        $this->twitter       = $settings['twitter'];
-        $this->pinterest     = $settings['pinterest'];
-        $this->instagram     = $settings['instagram'];
         $this->showName      = $settings['showName'];
-        $this->showPhoto     = $settings['showPhoto'];
+        $this->showPhoto     = 0;
         $this->showTitle     = $settings['showTitle'];
         $this->showEmail     = $settings['showEmail'];
         $this->showPhone     = $settings['showPhone'];
-        $this->showFacebook  = $settings['showFacebook'];
-        $this->showTwitter   = $settings['showTwitter'];
-        $this->showPinterest = $settings['showPinterest'];
-        $this->showInstagram = $settings['showInstagram'];
     }
 
     protected function getOrgChartStaffSettings($staff, $show_keys, $data) {
@@ -98,7 +91,6 @@ class Pluslet_OrgChart extends Pluslet {
             'title'         => $staff['title'],
             'email'         => $staff['email'],
             'tel'           => $staff['tel'],
-            'img_url'       => $staff_picture_url,
             'facebook'      => $social['facebook'],
             'twitter'       => $social['twitter'],
             'pinterest'     => $social['pinterest'],
@@ -126,12 +118,15 @@ class Pluslet_OrgChart extends Pluslet {
 
         // Grab all staff for entire library system
         $querier = new Querier();
-        $qs = "SELECT *
-                    FROM staff
-                    WHERE staff_id <> 1
-                    ORDER BY supervisor_id";
+        $qs = " SELECT *
+                FROM staff
+                WHERE staff_id <> 1
+                ORDER BY supervisor_id";
 
         $allStaff = $querier->query($qs);
+
+        $this->jsonObj = json_encode($allStaff);
+
         return $allStaff;
     }
 

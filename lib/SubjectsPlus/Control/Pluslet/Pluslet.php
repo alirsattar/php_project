@@ -743,7 +743,7 @@ class Pluslet {
             $this->onViewOutput();
 
             // Look for tokens, tokenize
-            $this->tokenizeText();
+            // $this->tokenizeText();
 
             $this->assemblePluslet($this->_hide_titlebar);
 
