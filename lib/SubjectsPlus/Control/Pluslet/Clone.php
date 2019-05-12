@@ -144,7 +144,11 @@ require_once("Pluslet.php");
 
              case "BookList":
                  $cloned_pluslet = new Pluslet_BookList($master, null, $subject_id, 1, $this->_pluslet_id);
-                 break;
+				 break;
+				 
+			 case "OrgChart":
+			 	 $cloned_pluslet = new Pluslet_OrgChart($master, null, $subject_id, 1, $this->_pluslet_id);
+			 	 break;
 		 }
 
 
