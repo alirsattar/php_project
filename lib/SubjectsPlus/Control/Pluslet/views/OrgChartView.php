@@ -1,49 +1,77 @@
-<?php
-/**
- * Created by Ali Sattar
- * User: alirsattar
- * Date: 05/11/2019
- * Time: 10:54 PM
- */
-?>
-
-
-<div>
-    <h1>TEST</h1>
-    <?php
-    $settings2 = array();
-    foreach($this->_staff as $staffer):
-        $settings2 = $this->getOrgChartStaffSettings($staffer, $this->_array_keys, $this->_data_array);
-        $this->setSubjectSpecialist($settings2);
-        echo "<p>" . $this->staff_id . "</p>";
-    endforeach;
-
-    echo $this->jsonObj;
-
-    ?>
-</div>
 
 <div class="org-chart pure-g" data-pluslet-id="<?php echo $this->_pluslet_id; ?>">
 
 <?php
-    $settings = array();
-    foreach($this->_staff as $staff):
-        $settings = $this->getOrgChartStaffSettings($staff, $this->_array_keys, $this->_data_array);
-        $this->setSubjectSpecialist($settings);
+echo
+"<div id=\"json-container\"hidden>
+    $this->jsonObj
+</div>"
 ?>
 
-    <div class="subject-specialists pure-u-md-1-5" data-staff-id="<?php echo $this->staff_id; ?>">
-        <div class="specialist-info show-photo-full">
-            <h4 data-show-name="<?php echo $this->showName; ?>"><?php echo $this->fullname; ?></h4>
-            <ul class="staff-details">
-                <li data-show-title="<?php echo $this->showTitle; ?>"><?php echo $this->title; ?></li>
-                <li data-show-email="<?php echo $this->showEmail; ?>"><a href="mailto:<?php echo $this->email; ?>"><?php echo $this->email; ?></a></li>
-                <li data-show-phone="<?php echo $this->showPhone; ?>"> ----------------- </li>
-            </ul>
-        </div>
-    </div>
+<!-- <script type="text/javascript">
 
-<?php endforeach; ?>
+    $(document).ready(()=> {
+        const allStaff = JSON.parse($('#json-container').html());
+        let baseObject = allStaff[0];
+
+        const orgChart = (staffObject)=> {
+            let supervisors = allStaff.filter(emp => emp.ptags == "supervisor" && emp.staff_id != 1).sort((a, b) => a.supervisor_id === null ? -1 : 1);
+
+            let tree = $('#tree');
+
+            // let baseObject = supervisors[0];
+
+            function mapIt(initial) {
+                function crawl(obj) {
+                    obj.subs = allStaff.filter(((emp) => emp.supervisor_id === obj.staff_id));
+                    if (obj.subs.length) {
+                    obj.subs.forEach((sub) => crawl(sub));
+                    };
+                    return obj;
+                };
+                return crawl(initial);
+            };
+
+            console.log(baseObject);
+
+            mapIt(baseObject);
+
+            function showAll(initial) {
+                function log(obj) {
+                    if (obj.subs.length) {
+                        let supervisorNode = $(tree).find(`*[data-id="${obj.staff_id}"]`);
+                        supervisorNode.append(`<ul data-id="${obj.staff_id}-subs">`);
+                        // console.log(`${obj.fname} ${obj.lname} subs:`);
+                        obj.subs.forEach((sub) => {
+                            supervisorNode.append(createChartNode(sub));
+                            // console.log(`${sub.fname} ${sub.lname} (${sub.subs.length})`);
+                        });
+                        // console.log('------------');
+                        obj.subs.forEach((s) => {
+                            log(s);
+                        });
+                    };
+                    tree.append(createChartNode(obj));
+                };
+                log(initial);
+            };
+
+            showAll(baseObject);
+
+            function createChartNode(staffMember){
+                return `<li data-id="${staffMember.staff_id}">${staffMember.fname} ${staffMember.lname}</li>`
+            };
+        };
+        orgChart(allStaff);
+    });
+
+</script>
+
+<div id="orgchart-container">
+    <ul id="tree">
+    </ul>
+</div>
+
 
 <div class="org-chart-description">
         <?php echo $this->_body; ?>
@@ -53,3 +81,41 @@
 <?php
     debug_print_backtrace();
 ?>
+
+</div> -->
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+    google.charts.load('current', {packages:["orgchart"]});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Name');
+        data.addColumn('string', 'Manager');
+        data.addColumn('string', 'ToolTip');
+
+        // For each orgchart box, provide the name, manager, and tooltip to show.
+
+        
+
+        data.addRows([
+            [{v:'Mike', f:'Mike<div style="color:red; font-style:italic">President</div>'},
+            '', 'The President'],
+            [{v:'Jim', f:'Jim<div style="color:red; font-style:italic">Vice President</div>'},
+            'Mike', 'VP'],
+            ['Alice', 'Mike', ''],
+            ['Bob', 'Jim', 'Bob Sponge'],
+            ['Carol', 'Bob', '']
+        ]);
+
+        // Create the chart.
+        var chart = new google.visualization.OrgChart(document.getElementById('chart_div'));
+        // Draw the chart, setting the allowHtml option to true for the tooltips.
+        chart.draw(data, {allowHtml:true});
+    }
+</script>
+
+<div id="chart_div"></div>
+
+<h1>TEST</h1>

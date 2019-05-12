@@ -14,6 +14,11 @@ class Pluslet_OrgChart extends Pluslet {
     public function __construct($pluslet_id, $flag="", $subject_id, $isclone=0) {
         parent::__construct($pluslet_id, $flag, $subject_id, $isclone);
 
+        global $AssetPath;
+        $this->jsPath = $AssetPath . 'js/jQuery.jHTree.js';
+        $this->imagePath = $AssetPath;
+        $this->cssPath = $AssetPath;
+
         $this->_type = "OrgChart";
 
         $this->_subject_id = $subject_id;
@@ -23,7 +28,8 @@ class Pluslet_OrgChart extends Pluslet {
         // What kind of hierarchy should be used
         global $default_orgChartByHierarchy;
 
-        $this->jsonObj = (object)[];
+        // $this->jsonObj = (object)[];
+        $this->jsonObj = new \stdClass;
 
         if( (isset($this->_orgChartByHierarchy)) && (!empty($this->_orgChartByHierarchy)) ) {
             $title = $this->_orgChartByHierarchy;
@@ -43,7 +49,6 @@ class Pluslet_OrgChart extends Pluslet {
         $this->_body = $this->loadHtml(__DIR__ . '/views/OrgChartView.php' );
     }
 
-
     protected function onEditOutput() {
 
         $body_before_ckEditor = $this->_body;
@@ -54,64 +59,6 @@ class Pluslet_OrgChart extends Pluslet {
 
         $this->_body .= '<hr>' . $ckEditor;
 
-    }
-
-
-    public function setSubjectSpecialist(array $settings) {
-        $this->staff_id      = $settings['staff_id'];
-        $this->fullname      = $settings['fname'].' '.$settings['lname'];
-        $this->title         = $settings['title'];
-        $this->email         = $settings['email'];
-        $this->tel           = $settings['tel'];
-        $this->showName      = $settings['showName'];
-        $this->showPhoto     = 0;
-        $this->showTitle     = $settings['showTitle'];
-        $this->showEmail     = $settings['showEmail'];
-        $this->showPhone     = $settings['showPhone'];
-    }
-
-    protected function getOrgChartStaffSettings($staff, $show_keys, $data) {
-
-        $social = $this->getStaffSocialMedia($staff['staff_id']);
-
-        $truncated_email = explode("@", $staff['email']);
-        if(isset($_GET['subject'])) {
-            $staff_picture_url = "../assets/users/_" . $truncated_email[0] . "/headshot.jpg";
-        } elseif(isset($_GET['subject_id'])) {
-            $staff_picture_url = $this->_relative_asset_path . "users/_" . $truncated_email[0] . "/headshot.jpg";
-        } else {
-            $staff_picture_url = $this->_relative_asset_path . "users/_" . $truncated_email[0] . "/headshot.jpg";
-        }
-
-
-        $settings = array(
-            'staff_id'      => $staff['staff_id'],
-            'fname'         => $staff['fname'],
-            'lname'         => $staff['lname'],
-            'title'         => $staff['title'],
-            'email'         => $staff['email'],
-            'tel'           => $staff['tel'],
-            'facebook'      => $social['facebook'],
-            'twitter'       => $social['twitter'],
-            'pinterest'     => $social['pinterest'],
-            'instagram'     => $social['instagram'],
-            'showName'      => isset($showStatusSettings['showName'])  ? $showStatusSettings['showName'] : "No",
-            'showPhoto'     => isset($showStatusSettings['showPhoto'])  ? $showStatusSettings['showPhoto'] : "No",
-            'showTitle'     => isset($showStatusSettings['showTitle'])  ? $showStatusSettings['showTitle'] : "No",
-            'showEmail'     => isset($showStatusSettings['showEmail'])  ? $showStatusSettings['showEmail'] : "No",
-            'showPhone'     => isset($showStatusSettings['showPhone'])  ? $showStatusSettings['showPhone'] : "No",
-            'showFacebook'  => isset($showStatusSettings['showFacebook'])  ? $showStatusSettings['showFacebook'] : "No",
-            'showTwitter'   => isset($showStatusSettings['showTwitter'])   ? $showStatusSettings['showTwitter'] : "No",
-            'showPinterest' => isset($showStatusSettings['showPinterest']) ? $showStatusSettings['showPinterest'] : "No",
-            'showInstagram' => isset($showStatusSettings['showInstagram']) ? $showStatusSettings['showInstagram'] : "No"
-        );
-        return $settings;
-    }
-
-    protected function getStaffSocialMedia($staff_id) {
-        $staff = $this->getEditorData($staff_id);
-        $data = json_decode(html_entity_decode( $staff[0]['social_media'] ), true);
-        return $data;
     }
 
     protected function getAllLibraryStaff($subject_id) {
@@ -130,14 +77,17 @@ class Pluslet_OrgChart extends Pluslet {
         return $allStaff;
     }
 
-    protected function getEditorData($staffId) {
-        $querier = new Querier();
-        $qs = "SELECT lname, fname, email, tel, title, extra, social_media
-                FROM staff
-                WHERE staff_id = {$staffId}";
-        $editorData = $querier->query($qs);
-        return $editorData;
-    }
+    // protected function formatStaffHierarchically($allStaff){
+        
+    // }
+
+    // protected function recursiveLoopForSubordinates($singleStaffMember, $allStaff){
+    //     obj.subs = allStaff.filter(((emp) => emp.supervisor_id === obj.staff_id));
+    //     if (obj.subs.length) {
+    //         obj.subs.forEach((sub) => crawl(sub));
+    //     };
+    //     return obj;
+    // }
 
     protected function getCkEditor($body_before_ckEditor) {
 
