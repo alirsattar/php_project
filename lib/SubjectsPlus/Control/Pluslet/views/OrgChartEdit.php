@@ -67,8 +67,12 @@
 
     <div style="display: flex; justify-content: center;">
         <h1>Organizational Chart</h1>
+        <h2>TEST</h2>
     </div>
 
     <div id="chart_div"></div>
+    </div>
+
+    <div id="edit-box">
     </div>
 </div>
