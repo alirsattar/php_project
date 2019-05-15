@@ -18,11 +18,7 @@
             data.addColumn('string', 'Name');
             data.addColumn('string', 'Manager');
             data.addColumn('string', 'ToolTip');
-
-            // let allStaff = JSON.parse($('#json-container').html());
-
-            // console.log('----------------- allStaff: ', allStaff);
-
+            
             let dataFormatted = [];
             let nodes = [];
 
@@ -67,12 +63,12 @@
 
     <div style="display: flex; justify-content: center;">
         <h1>Organizational Chart</h1>
-        <h2>TEST</h2>
     </div>
 
     <div id="chart_div"></div>
     </div>
 
     <div id="edit-box">
+        <input type="text">
     </div>
 </div>

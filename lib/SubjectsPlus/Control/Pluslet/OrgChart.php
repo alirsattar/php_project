@@ -20,7 +20,6 @@ class Pluslet_OrgChart extends Pluslet {
         // What kind of hierarchy should be used
         global $default_orgChartByHierarchy;
 
-        // $this->jsonObj = (object)[];
         $this->jsonObj = new \stdClass;
 
         if( (isset($this->_orgChartByHierarchy)) && (!empty($this->_orgChartByHierarchy)) ) {
@@ -51,6 +50,9 @@ class Pluslet_OrgChart extends Pluslet {
 
     }
 
+    /**
+     * @param Number Subject ID
+     */
     protected function getLibraryStaff($subject_id) {
 
         // Grab selected staff members
